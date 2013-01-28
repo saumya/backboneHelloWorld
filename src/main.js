@@ -71,12 +71,16 @@
 			return this;
 		}
 	});
+	//main view
 	var DirectoryView = Backbone.View.extend({
 	    el: $("#contacts"),
 	    initialize: function () {
 	    	console.log('DirectoryView : initialize : ');
 	        this.collection = new Directory(contacts);
 	        this.render();
+	        //
+	        this.$el.find("#filter").append(this.createSelect());//for select
+	        //console.log(this.$el.find("#filter"));
 	    },
 	    render: function () {
 	        var that = this;
@@ -89,7 +93,25 @@
 	            model: item
 	        });
 	        this.$el.append(contactView.render().el);
-	    }
+	    },
+	    getTypes: function () {
+		    return _.uniq(this.collection.pluck("type"), false, function (type) {
+		        return type.toLowerCase();
+		    });
+		},
+		createSelect: function () {
+		    var filter = this.$el.find("#filter"),
+		        select = $("<select/>", {
+		            html: "<option>All</option>"
+		        });
+		    _.each(this.getTypes(), function (item) {
+		        var option = $("<option/>", {
+		            value: item.toLowerCase(),
+		            text: item.toLowerCase()
+		        }).appendTo(select);
+		    });
+		    return select;
+		}
 	});
 	//finally initialise the main view
 	var directory = new DirectoryView();
