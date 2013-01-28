@@ -40,6 +40,9 @@
   var appview = new AppView;
 })(jQuery);
 */
+
+//Ref : http://net.tutsplus.com/tutorials/javascript-ajax/build-a-contacts-manager-using-backbone-js-part-2/
+//making a contacts list
 (function ($) {
 	console.log('init app');
     var contacts = [
@@ -127,6 +130,7 @@
 			console.log('DirectoryView : filterByType');
 		    if (this.filterType === "all") {
 		        this.collection.reset(contacts);
+		        contactsRouter.navigate("filter/all");
 		    } else {
 		        this.collection.reset(contacts, { silent: true });
 		        var filterType = this.filterType,
@@ -134,13 +138,28 @@
 			            return item.get("type").toLowerCase() === filterType;
 			        });
 		        this.collection.reset(filtered);
+		        contactsRouter.navigate("filter/" + filterType);
 		    }
 		}
-		
-		//End Main View : DirectoryView
-	});
+	});//End Main View : DirectoryView
+	//Routes
+	var ContactsRouter = Backbone.Router.extend({
+	    routes: {
+		        "filter/:type": "urlFilter"
+		    },
+		    urlFilter: function (type) {
+		        directory.filterType = type;
+		        directory.trigger("change:filterType");
+		    }
+	});//End Routes
+	
+	//The Final part, initialisation and configuration
 	//finally initialise the main view
 	var directory = new DirectoryView();
+	//adding the routes support
+	var contactsRouter = new ContactsRouter();
+	//adds url route
+	Backbone.history.start();
 				
 				
 } (jQuery));
