@@ -1,0 +1,1 @@
+all assets ie; js libs, css, images etc
