@@ -59,7 +59,12 @@
     ];
     var Contact = Backbone.Model.extend({
 		defaults: {
-		        photo: "assets/images/placeholder.png"
+		        photo: "assets/images/placeholder.png",
+		        name: "Default Name",
+				address: "Default Address",
+				tel: "00100",
+				email: "default@default.com",
+				type: "deafult"
 		    }
 		});
 	var Directory = Backbone.Collection.extend({
@@ -88,6 +93,7 @@
 	        //
 	        this.on("change:filterType", this.filterByType, this);//registering event handlers
 	        this.collection.on("reset", this.render, this);//registering event handler on collection
+	        this.collection.on("add", this.renderContact, this);
 	    },
 	    render: function () {
 	    	console.log('DirectoryView : render');
@@ -125,7 +131,8 @@
 		},
 		//Events
 		events: {
-		    "change #filter select": "setFilter"
+		    "change #filter select": "setFilter",
+		    "click #add": "addContact"
 		},
 		//Event handler
 		setFilter: function (e) {
@@ -146,7 +153,26 @@
 		        this.collection.reset(filtered);
 		        contactsRouter.navigate("filter/" + filterType);
 		    }
+		},
+		addContact: function (e) {
+		console.log('DirectoryView : addContact');
+		    e.preventDefault();
+		    var formData = {};
+		    $("#addContact").children("input").each(function (i, el) {
+		        if ($(el).val() !== "") {
+		            formData[el.id] = $(el).val();
+		      }
+		    });
+		    contacts.push(formData);
+		    if (_.indexOf(this.getTypes(), formData.type) === -1) {
+		         this.collection.add(new Contact(formData));
+		        this.$el.find("#filter").find("select").remove().end().append(this.createSelect());
+		    } else {
+		        this.collection.add(new Contact(formData));
+		    }
 		}
+		
+		
 	});//End Main View : DirectoryView
 	//Routes
 	var ContactsRouter = Backbone.Router.extend({
