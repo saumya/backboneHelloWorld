@@ -83,12 +83,16 @@
 	        this.render();
 	        //
 	        this.$el.find("#filter").append(this.createSelect());//for select
+	        //
 	        this.on("change:filterType", this.filterByType, this);//registering event handlers
 	        this.collection.on("reset", this.render, this);//registering event handler on collection
 	    },
 	    render: function () {
 	    	console.log('DirectoryView : render');
 	        var that = this;
+	        
+	        this.$el.find("article").remove();
+	        
 	        _.each(this.collection.models, function (item) {
 	            that.renderContact(item);
 	        }, this);
@@ -101,19 +105,19 @@
 	    },
 	    getTypes: function () {
 		    return _.uniq(this.collection.pluck("type"), false, function (type) {
-		        return type.toLowerCase();
-		    });
+															        return type.toLowerCase();
+															    });
 		},
 		createSelect: function () {
-		    var filter = this.$el.find("#filter"),
-		        select = $("<select/>", {
-		            html: "<option>All</option>"
+		    /*var filter = this.$el.find("#filter"),*/
+		    var select = $("<select/>", {
+		            html: "<option value='all'>All</option>"
 		        });
 		    _.each(this.getTypes(), function (item) {
-		        var option = $("<option/>", {
-		            value: item.toLowerCase(),
-		            text: item.toLowerCase()
-		        }).appendTo(select);
+		    var option = $("<option/>", {
+								            value: item.toLowerCase(),
+								            text: item.toLowerCase()
+								        }).appendTo(select);
 		    });
 		    return select;
 		},
