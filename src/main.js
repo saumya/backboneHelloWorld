@@ -80,9 +80,11 @@
 	        this.render();
 	        //
 	        this.$el.find("#filter").append(this.createSelect());//for select
-	        //console.log(this.$el.find("#filter"));
+	        this.on("change:filterType", this.filterByType, this);//registering event handlers
+	        this.collection.on("reset", this.render, this);//registering event handler on collection
 	    },
 	    render: function () {
+	    	console.log('DirectoryView : render');
 	        var that = this;
 	        _.each(this.collection.models, function (item) {
 	            that.renderContact(item);
@@ -122,6 +124,7 @@
 		    this.trigger("change:filterType");
 		},
 		filterByType: function () {
+			console.log('DirectoryView : filterByType');
 		    if (this.filterType === "all") {
 		        this.collection.reset(contacts);
 		    } else {
