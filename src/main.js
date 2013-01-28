@@ -40,7 +40,9 @@
   var appview = new AppView;
 })(jQuery);
 */
-
+//All references
+//Ref : http://net.tutsplus.com/sessions/build-a-contacts-manager-using-backbone-js/?search_index=1
+//individual page or excercise
 //Ref : http://net.tutsplus.com/tutorials/javascript-ajax/build-a-contacts-manager-using-backbone-js-part-2/
 //making a contacts list
 (function ($) {
