@@ -83,7 +83,12 @@
 			return this;
 		},
 		events: {
-		    "click button.delete": "deleteContact"
+		    "click button.delete": "deleteContact",
+		    //events for editing form
+		    "click button.edit": "editContact",
+			/*"change select.type": "addType",
+			"click button.save": "saveEdits",
+			"click button.cancel": "cancelEdit"*/
 		},
 		deleteContact: function () {
 		   var removedType = this.model.get("type").toLowerCase();
@@ -92,6 +97,18 @@
 		    if (_.indexOf(directory.getTypes(), removedType) === -1) {
 		        directory.$el.find("#filter select").children("[value='" + removedType + "']").remove();
 		    }
+		},
+		editContact: function () {
+			console.log('ContactView : editContact : ');
+			this.$el.html(this.editTemplate(this.model.toJSON()));
+			var newOpt = $("<option/>", {
+		        html: "<em>Add new...</em>",
+		        value: "addType"
+		    })
+		    this.select = directory.createSelect().addClass("type")
+		        .val(this.$el.find("#type").val()).append(newOpt)
+		        .insertAfter(this.$el.find(".name"));
+		    this.$el.find("input[type='hidden']").remove();
 		}
 	});
 	//main view : DirectoryView
@@ -150,11 +167,6 @@
 		    "change #filter select": "setFilter",
 		    "click #add": "addContact",
 		    "click #showForm": "showForm",
-		    //events of edit form
-		    "click button.edit": "editContact",
-			"change select.type": "addType",
-			"click button.save": "saveEdits",
-			"click button.cancel": "cancelEdit"
 		},
 		//Event handler
 		setFilter: function (e) {
