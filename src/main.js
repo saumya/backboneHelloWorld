@@ -87,8 +87,8 @@
 		    //events for editing form
 		    "click button.edit": "editContact",
 			"change select.type": "addType",
-			/*"click button.save": "saveEdits",
-			"click button.cancel": "cancelEdit"*/
+			"click button.save": "saveEdits",
+			"click button.cancel": "cancelEdit"
 		},
 		deleteContact: function () {
 		   var removedType = this.model.get("type").toLowerCase();
@@ -118,7 +118,33 @@
 			        "class": "type"
 			    }).insertAfter(this.$el.find(".name")).focus();
 			}
-		}
+		},
+		saveEdits: function (e) {
+		   e.preventDefault();
+		    var formData = {},
+		        prev = this.model.previousAttributes();
+		    $(e.target).closest("form").find(":input").add(".photo").each(function () {
+		        var el = $(this);
+		        formData[el.attr("class")] = el.val();
+		    });
+		    if (formData.photo === "") {
+		        delete formData.photo;
+		    }
+		    this.model.set(formData);
+		    this.render();
+		    if (prev.photo === "assets/images/placeholder.png") {
+		        delete prev.photo;
+		    }
+		    _.each(contacts, function (contact) {
+		        if (_.isEqual(contact, prev)) {
+		            contacts.splice(_.indexOf(contacts, contact), 1, formData);
+		        }
+		    });
+		},
+		cancelEdit: function () {
+		    this.render();
+		},
+		
 	});
 	//main view : DirectoryView
 	var DirectoryView = Backbone.View.extend({
