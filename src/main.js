@@ -102,16 +102,19 @@
 	        this.render();
 	        //
 	        this.$el.find("#filter").append(this.createSelect());//for select
-	        //
+	        //Registering EventHandlers
 	        this.on("change:filterType", this.filterByType, this);//registering event handlers
-	        this.collection.on("reset", this.render, this);//registering event handler on collection
+	        //EventHandlers on Collection
+	        this.collection.on("reset", this.render, this);
 	        this.collection.on("add", this.renderContact, this);
+	        this.collection.on("remove", this.removeContact, this);
 	    },
 	    render: function () {
 	    	console.log('DirectoryView : render');
 	        var that = this;
 	        
 	        this.$el.find("article").remove();
+	        this.$el.find("#addContact").slideToggle();//hide the input form in the beginning
 	        
 	        _.each(this.collection.models, function (item) {
 	            that.renderContact(item);
@@ -144,7 +147,8 @@
 		//Events
 		events: {
 		    "change #filter select": "setFilter",
-		    "click #add": "addContact"
+		    "click #add": "addContact",
+		    "click #showForm": "showForm"
 		},
 		//Event handler
 		setFilter: function (e) {
@@ -182,7 +186,23 @@
 		    } else {
 		        this.collection.add(new Contact(formData));
 		    }
+		},
+		removeContact: function (removedModel) {
+		    var removed = removedModel.attributes;
+		    if (removed.photo === "assets/images/placeholder.png") {
+		        delete removed.photo;
+		    }
+		    _.each(contacts, function (contact) {
+		        if (_.isEqual(contact, removed)) {
+		            contacts.splice(_.indexOf(contacts, contact), 1);
+		        }
+		    });
+		},
+		showForm: function () {
+		    this.$el.find("#addContact").slideToggle();
 		}
+		
+		
 		
 		
 	});//End Main View : DirectoryView
