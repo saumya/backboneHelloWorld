@@ -86,8 +86,8 @@
 		    "click button.delete": "deleteContact",
 		    //events for editing form
 		    "click button.edit": "editContact",
-			/*"change select.type": "addType",
-			"click button.save": "saveEdits",
+			"change select.type": "addType",
+			/*"click button.save": "saveEdits",
 			"click button.cancel": "cancelEdit"*/
 		},
 		deleteContact: function () {
@@ -109,6 +109,15 @@
 		        .val(this.$el.find("#type").val()).append(newOpt)
 		        .insertAfter(this.$el.find(".name"));
 		    this.$el.find("input[type='hidden']").remove();
+		},
+		addType: function () {
+			console.log('ContactView : addType : ');
+			if (this.select.val() === "addType") {
+			    this.select.remove();
+			    $("<input />", {
+			        "class": "type"
+			    }).insertAfter(this.$el.find(".name")).focus();
+			}
 		}
 	});
 	//main view : DirectoryView
