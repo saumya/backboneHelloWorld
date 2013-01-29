@@ -75,7 +75,8 @@
 	var ContactView = Backbone.View.extend({
 		tagName: "article",
 		className: "contact-container",
-		template: $("#contactTemplate").html(),
+		template: $("#contactTemplate").html(),//rendering only template
+		editTemplate: _.template($("#contactEditTemplate").html()),//edit contact template
 		render: function(){
 			var tmpl = _.template(this.template);
 			this.$el.html(tmpl(this.model.toJSON()));
@@ -148,7 +149,12 @@
 		events: {
 		    "change #filter select": "setFilter",
 		    "click #add": "addContact",
-		    "click #showForm": "showForm"
+		    "click #showForm": "showForm",
+		    //events of edit form
+		    "click button.edit": "editContact",
+			"change select.type": "addType",
+			"click button.save": "saveEdits",
+			"click button.cancel": "cancelEdit"
 		},
 		//Event handler
 		setFilter: function (e) {
