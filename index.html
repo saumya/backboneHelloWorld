@@ -22,6 +22,7 @@
 			</form>
 		</div>
 		<!-- template -->
+		<!-- view template -->
 		<script id="contactTemplate" type="text/template">
 		    <img src="<%= photo %>" alt="<%= name %>" />
 		    <h1><%= name %><span><%= type %></span></h1>
@@ -31,6 +32,20 @@
 		        <dt>Email:</dt><dd><a href="mailto:<%= email %>"><%= email %></a></dd>
 		    </dl>
 		    <button class="delete">Delete</button>
+		    <button class="edit">Edit</button>
+		</script>
+		<!-- edit template -->
+		<script id="contactEditTemplate" type="text/template">
+			<form action="#">
+			    <input type="file" value="<%= photo %>" />
+			    <input class="name" value="<%= name %>" />
+			    <input id="type" type="hidden" value="<%= type %>" />
+			    <input class="address" value="<%= address %>" />
+			    <input class="tel" value="<%= tel %>" />
+			    <input class="email" value="<%= email %>" />
+			    <button class="save">Save</button>
+			    <button class="cancel">Cancel</button>
+			</form>
 		</script>
 		<!-- END template -->
 		
